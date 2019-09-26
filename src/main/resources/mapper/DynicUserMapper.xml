@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zpark.neimin.first.dao.DynicMapper">
+    <select id="getDyicUser" parameterType="com.zpark.neimin.first.model.DynicUser" resultType="com.zpark.neimin.first.model.DynicUser">
+
+        select * from users
+
+            <trim prefix="where" prefixOverrides="and | or">
+                <include refid="chongfu"></include>
+            </trim>
+
+
+    </select>
+
+    <select id="selMore" parameterType="com.zpark.neimin.first.model.UserVo" resultType="com.zpark.neimin.first.model.DynicUser">
+        -- select * from user where id in (1,2,3)
+        select * from users
+        <where>
+            <foreach collection="ids" item="id" open="id in (" close=")" separator=",">
+                #{id}
+            </foreach>
+        </where>
+    </select>
+
+    <sql id="chongfu">
+        <if test="username != null">
+            and username = #{username}
+        </if>
+        <if test="sex != null">
+            and sex = #{sex}
+        </if>
+    </sql>
+
+    <update id="updateDynicUser" parameterType="com.zpark.neimin.first.model.DynicUser">
+        update users u
+<!--        <set>-->
+<!--            <if test="username != null and username != ''">-->
+<!--                u.username = #{username},-->
+<!--            </if>-->
+<!--            <if test="sex != null and sex != ''">-->
+<!--                u.sex = #{sex},-->
+<!--            </if>-->
+<!--        </set>-->
+        <trim prefix="set" suffixOverrides=",">
+            <if test="username != null and username != ''">
+                u.username = #{username},
+            </if>
+            <if test="sex != null and sex != ''">
+                u.sex = #{sex},
+            </if>
+        </trim>
+        where u.id = #{id}
+    </update>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
